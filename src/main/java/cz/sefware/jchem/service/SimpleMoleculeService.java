@@ -14,7 +14,7 @@ public class SimpleMoleculeService {
 
 	private static final String BASE_DIRECTORY = "files/";
 
-	public List<MoleculeInfo> getMolecules() {
+	public List<MoleculeInfo> getMoleculeInfos() {
 		File directory = new File(BASE_DIRECTORY);
 		File[] files = directory.listFiles(new FilenameFilter() {
 
@@ -39,6 +39,10 @@ public class SimpleMoleculeService {
 			}
 		}
 		return output;
+
+	}
+
+	public void saveMolecule(byte[] bytes, MoleculeInfo info) {
 
 	}
 

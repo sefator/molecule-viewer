@@ -1,5 +1,11 @@
 jQuery(document).ready(function(){
 	reloadMolecules();
+	$('#fileupload').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+        	reloadMolecules();
+        }
+    });
 });
 
 function reloadMolecules() {

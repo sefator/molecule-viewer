@@ -1,12 +1,11 @@
 package cz.sefware.jchem.model;
 
-
 public class MoleculeInfo {
 
 	private String filename;
 	private String name;
 	private Long id;
-	private FileFormat format;
+	private String format;
 
 	public String getFilename() {
 		return filename;
@@ -32,11 +31,11 @@ public class MoleculeInfo {
 		this.id = id;
 	}
 
-	public FileFormat getFormat() {
+	public String getFormat() {
 		return format;
 	}
 
-	public void setFormat(FileFormat format) {
+	public void setFormat(String format) {
 		this.format = format;
 	}
 
