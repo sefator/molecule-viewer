@@ -1,6 +1,5 @@
 package cz.sefware.jchem.model;
 
-import cz.sefware.jchem.enums.FileFormat;
 
 public class MoleculeInfo {
 
