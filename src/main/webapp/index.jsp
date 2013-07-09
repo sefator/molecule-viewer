@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>Simple molecule viewer</h1>
-<input id="fileupload" type="file" name="files[]" data-url="upload" multiple>
+<input id="fileupload" type="file" name="file" data-url="upload" multiple>
 <ul id='molecules'>
 </ul>
 <img alt="" src="">

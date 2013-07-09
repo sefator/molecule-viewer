@@ -53,7 +53,7 @@ public class SimpleMoleculeService {
 
 	}
 
-	public void saveMolecule(byte[] bytes, Molecule molecule) {
+	public MoleculeInfo saveMolecule(byte[] bytes, Molecule molecule) {
 		FileOutputStream output = null;
 		MoleculeInfo info = new MoleculeInfo();
 		info.setId(System.nanoTime());
@@ -77,6 +77,7 @@ public class SimpleMoleculeService {
 					+ File.separator + info.getFilename() + INFO_EXTENSION));
 			ObjectMapper om = new ObjectMapper();
 			om.writeValue(output, info);
+			return info;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,6 +85,7 @@ public class SimpleMoleculeService {
 		} finally {
 			IOUtils.closeQuietly(output);
 		}
+		return null;
 
 	}
 
