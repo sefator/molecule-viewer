@@ -1,17 +1,21 @@
 package cz.sefware.jchem.service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import chemaxon.struc.Molecule;
 import cz.sefware.jchem.model.MoleculeInfo;
 
 public class SimpleMoleculeService {
 
+	private static final String INFO_EXTENSION = ".molinfo";
 	private static final String BASE_DIRECTORY = "files/";
 
 	public List<MoleculeInfo> getMoleculeInfos() {
@@ -20,7 +24,7 @@ public class SimpleMoleculeService {
 
 			public boolean accept(File file, String filename) {
 				String lowerName = filename.toLowerCase();
-				if (lowerName.endsWith(".molinfo")) {
+				if (lowerName.endsWith(INFO_EXTENSION)) {
 					return true;
 				}
 				return false;
@@ -42,7 +46,36 @@ public class SimpleMoleculeService {
 
 	}
 
-	public void saveMolecule(byte[] bytes, MoleculeInfo info) {
+	public void saveMolecule(byte[] bytes, Molecule molecule) {
+		FileOutputStream output = null;
+		MoleculeInfo info = new MoleculeInfo();
+		info.setFilename(String.valueOf(System.nanoTime()));
+		info.setName(molecule.getFormula());
+		info.setFormat(molecule.getInputFormat());
+		try {
+			output = new FileOutputStream(new File(BASE_DIRECTORY
+					+ File.separator + info.getFilename()));
+			IOUtils.write(bytes, output);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} finally {
+			IOUtils.closeQuietly(output);
+		}
+
+		try {
+			output = new FileOutputStream(new File(BASE_DIRECTORY
+					+ File.separator + info.getFilename() + INFO_EXTENSION));
+			ObjectMapper om = new ObjectMapper();
+			om.writeValue(output, info);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} finally {
+			IOUtils.closeQuietly(output);
+		}
 
 	}
 

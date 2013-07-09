@@ -16,7 +16,6 @@ import org.apache.commons.io.IOUtils;
 import chemaxon.formats.MolFormatException;
 import chemaxon.formats.MolImporter;
 import chemaxon.struc.Molecule;
-import cz.sefware.jchem.model.MoleculeInfo;
 import cz.sefware.jchem.service.SimpleMoleculeService;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
@@ -33,11 +32,8 @@ public class UploadServlet extends HttpServlet {
 			try {
 				byte[] bytes = IOUtils.toByteArray(part.getInputStream());
 				Molecule molecule = MolImporter.importMol(bytes);
-				MoleculeInfo info = new MoleculeInfo();
-				info.setFilename(part.getName());
-				info.setName(molecule.getFormula());
-				info.setFormat(molecule.getInputFormat());
-				service.saveMolecule(bytes, info);
+
+				service.saveMolecule(bytes, molecule);
 			} catch (MolFormatException e) {
 				// wrong file type
 			}
