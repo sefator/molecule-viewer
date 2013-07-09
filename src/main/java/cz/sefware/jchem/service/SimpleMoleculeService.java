@@ -1,22 +1,29 @@
 package cz.sefware.jchem.service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import chemaxon.formats.MolFormatException;
+import chemaxon.formats.MolImporter;
 import chemaxon.struc.Molecule;
 import cz.sefware.jchem.model.MoleculeInfo;
 
+@Singleton
 public class SimpleMoleculeService {
 
 	private static final String INFO_EXTENSION = ".molinfo";
-	private static final String BASE_DIRECTORY = "files/";
+	private static final String BASE_DIRECTORY = "/tmp/files/";
 
 	public List<MoleculeInfo> getMoleculeInfos() {
 		File directory = new File(BASE_DIRECTORY);
@@ -49,7 +56,8 @@ public class SimpleMoleculeService {
 	public void saveMolecule(byte[] bytes, Molecule molecule) {
 		FileOutputStream output = null;
 		MoleculeInfo info = new MoleculeInfo();
-		info.setFilename(String.valueOf(System.nanoTime()));
+		info.setId(System.nanoTime());
+		info.setFilename(String.valueOf(info.getId()));
 		info.setName(molecule.getFormula());
 		info.setFormat(molecule.getInputFormat());
 		try {
@@ -77,6 +85,24 @@ public class SimpleMoleculeService {
 			IOUtils.closeQuietly(output);
 		}
 
+	}
+
+	public Molecule getMolecule(Long id) {
+		try {
+			return MolImporter.importMol(IOUtils
+					.toByteArray(new FileInputStream(new File(BASE_DIRECTORY
+							+ String.valueOf(id)))));
+		} catch (MolFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

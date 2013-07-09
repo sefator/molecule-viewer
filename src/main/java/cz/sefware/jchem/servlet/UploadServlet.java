@@ -2,7 +2,6 @@ package cz.sefware.jchem.servlet;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -22,8 +21,8 @@ import cz.sefware.jchem.service.SimpleMoleculeService;
 @WebServlet(urlPatterns = "/upload")
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = -2690570472811965423L;
-	@Inject
-	private SimpleMoleculeService service;
+	// @Inject
+	private SimpleMoleculeService service = new SimpleMoleculeService();
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)

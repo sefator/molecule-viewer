@@ -12,5 +12,6 @@
 <input id="fileupload" type="file" name="files[]" data-url="upload" multiple>
 <ul id='molecules'>
 </ul>
+<img alt="" src="">
 </body>
 </html>
