@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,14 +30,19 @@ import cz.sefware.jchem.service.SimpleMoleculeDatastore;
  * 
  */
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
-@WebServlet(urlPatterns = "/upload")
+@WebServlet(urlPatterns = "/upload", initParams = { @WebInitParam(name = "baseDirectory", value = SimpleMoleculeDatastore.DEFAULT_DIRECTORY) })
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = -2690570472811965423L;
 
-	private MoleculeDatastore store = new SimpleMoleculeDatastore();
+	private MoleculeDatastore store;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UploadServlet.class);
+
+	@Override
+	public void init() throws ServletException {
+		store = new SimpleMoleculeDatastore(getInitParameter("baseDirectory"));
+	}
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)

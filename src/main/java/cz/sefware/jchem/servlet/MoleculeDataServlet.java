@@ -8,6 +8,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
 import org.apache.commons.io.IOUtils;
@@ -27,14 +28,19 @@ import cz.sefware.jchem.service.SimpleMoleculeDatastore;
  * 
  * @author jg
  */
-@WebServlet(urlPatterns = "/MoleculeData")
+@WebServlet(urlPatterns = "/MoleculeData", initParams = { @WebInitParam(name = "baseDirectory", value = SimpleMoleculeDatastore.DEFAULT_DIRECTORY) })
 public class MoleculeDataServlet extends GenericServlet implements Servlet {
 	private static final long serialVersionUID = 1L;
 
-	private MoleculeDatastore store = new SimpleMoleculeDatastore();
+	private MoleculeDatastore store;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MoleculeDataServlet.class);
+
+	@Override
+	public void init() throws ServletException {
+		store = new SimpleMoleculeDatastore(getInitParameter("baseDirectory"));
+	}
 
 	/**
 	 * @see Servlet#service(ServletRequest request, ServletResponse response)
