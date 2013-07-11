@@ -1,5 +1,11 @@
 package cz.sefware.jchem.model;
 
+/**
+ * Simple model for holding metadata about Molecule objects stored on server.
+ * 
+ * @author jg
+ * 
+ */
 public class MoleculeInfo {
 
 	private String filename;
