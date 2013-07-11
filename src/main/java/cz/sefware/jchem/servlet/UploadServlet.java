@@ -51,9 +51,11 @@ public class UploadServlet extends HttpServlet {
 		Part part = request.getPart("file");
 		try {
 			byte[] bytes = IOUtils.toByteArray(part.getInputStream());
+			// read molecule to verify uploaded file
 			Molecule molecule = MolImporter.importMol(bytes);
-
+			// save uploaded file and generate MoleculeInfo
 			MoleculeInfo info = store.saveMolecule(bytes, molecule);
+			// serialize to JSON and return
 			ObjectMapper om = new ObjectMapper();
 			om.writeValue(response.getOutputStream(), info);
 			LOGGER.debug("File {} sucessfuly saved in {}.", info.getId(),

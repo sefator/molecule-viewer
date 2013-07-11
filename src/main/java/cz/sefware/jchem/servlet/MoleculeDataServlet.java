@@ -51,6 +51,7 @@ public class MoleculeDataServlet extends GenericServlet implements Servlet {
 		if (requestId == null || requestId.isEmpty()) {
 			LOGGER.debug("Received request for file list.");
 			List<MoleculeInfo> infos = store.getMoleculeInfos();
+			// serialize list to JSON and return to client
 			ObjectMapper om = new ObjectMapper();
 			om.writeValue(response.getOutputStream(), infos);
 			LOGGER.debug("Returned {} items", infos.size());
@@ -60,6 +61,7 @@ public class MoleculeDataServlet extends GenericServlet implements Servlet {
 			Long id = Long.valueOf(requestId);
 			Molecule molecule = store.getMolecule(id);
 			response.setContentType("image/jpeg");
+			// TODO: use new API for image output
 			IOUtils.write(molecule.toBinFormat("jpeg:setcolors,w800,h600,Q96"),
 					response.getOutputStream());
 			LOGGER.debug("Successfuly returned molecule image.");
