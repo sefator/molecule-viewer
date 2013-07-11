@@ -28,7 +28,7 @@ import cz.sefware.jchem.model.MoleculeInfo;
 public class SimpleMoleculeDatastore implements MoleculeDatastore {
 
 	public static final String DEFAULT_DIRECTORY = "/tmp/files/";
-	private static final String INFO_EXTENSION = ".molinfo";
+	public static final String INFO_EXTENSION = ".molinfo";
 	private String baseDirectory;
 
 	private static final Logger LOGGER = LoggerFactory
