@@ -82,12 +82,14 @@ public class SimpleMoleculeDatastore implements MoleculeDatastore {
 	 * chemaxon.struc.Molecule)
 	 */
 	@Override
-	public MoleculeInfo saveMolecule(byte[] bytes, Molecule molecule) {
+	public MoleculeInfo saveMolecule(byte[] bytes, Molecule molecule,
+			String originalFilename) {
 		FileOutputStream output = null;
 		MoleculeInfo info = new MoleculeInfo();
 		info.setId(System.nanoTime());
 		info.setFilename(String.valueOf(info.getId()));
-		info.setName(molecule.getFormula());
+		info.setName(originalFilename);
+		info.setFormula(molecule.getFormula());
 		info.setFormat(molecule.getInputFormat());
 		try {
 			output = new FileOutputStream(new File(baseDirectory

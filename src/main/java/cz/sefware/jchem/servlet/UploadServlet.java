@@ -54,7 +54,8 @@ public class UploadServlet extends HttpServlet {
 			// read molecule to verify uploaded file
 			Molecule molecule = MolImporter.importMol(bytes);
 			// save uploaded file and generate MoleculeInfo
-			MoleculeInfo info = store.saveMolecule(bytes, molecule);
+			MoleculeInfo info = store.saveMolecule(bytes, molecule,
+					getFileName(part));
 			// serialize to JSON and return
 			ObjectMapper om = new ObjectMapper();
 			om.writeValue(response.getOutputStream(), info);
@@ -65,6 +66,22 @@ public class UploadServlet extends HttpServlet {
 			throw new ServletException("Invalid molecule file.", e);
 		}
 
+	}
+
+	/**
+	 * Returns filename of uploaded file
+	 * 
+	 * @param part
+	 * @return
+	 */
+	private String getFileName(Part part) {
+		for (String cd : part.getHeader("content-disposition").split(";")) {
+			if (cd.trim().startsWith("filename")) {
+				return cd.substring(cd.indexOf('=') + 1).trim()
+						.replace("\"", "");
+			}
+		}
+		return null;
 	}
 
 }

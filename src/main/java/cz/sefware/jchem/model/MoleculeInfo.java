@@ -12,6 +12,7 @@ public class MoleculeInfo {
 	private String name;
 	private Long id;
 	private String format;
+	private String formula;
 
 	public String getFilename() {
 		return filename;
@@ -43,6 +44,14 @@ public class MoleculeInfo {
 
 	public void setFormat(String format) {
 		this.format = format;
+	}
+
+	public String getFormula() {
+		return formula;
+	}
+
+	public void setFormula(String formula) {
+		this.formula = formula;
 	}
 
 }

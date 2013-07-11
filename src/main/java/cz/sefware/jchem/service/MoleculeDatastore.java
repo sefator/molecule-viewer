@@ -23,7 +23,8 @@ public interface MoleculeDatastore {
 	 *            parsed molecule object
 	 * @return MoleculeInfo describing given molecule
 	 */
-	public abstract MoleculeInfo saveMolecule(byte[] bytes, Molecule molecule);
+	public abstract MoleculeInfo saveMolecule(byte[] bytes, Molecule molecule,
+			String originalFilename);
 
 	/**
 	 * Fetches molecule from datastore by id.
