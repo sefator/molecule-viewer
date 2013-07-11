@@ -36,6 +36,7 @@ function reloadMolecules() {
 	jQuery.ajax({
 		url: "MoleculeData",
 		dataType: "json",
+		cache:false,
 		success: function(data){
 			jQuery.each(data, function(k,v){
 				var li = jQuery("<li style='cursor:pointer;' id='"+v.id+"'><a href='#'>"+v.name+"("+v.formula+")</a></li>");
