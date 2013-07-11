@@ -7,6 +7,7 @@ Instalation
 -----------
 1. Download and unpack jchem-signed-lib-6.0.2.zip from http://www.chemaxon.com/download/jchem/jchem-for-java 
 2. Use following commands to install required jars to your local maven repository.
+
     mvn install:install-file -Dfile=chemaxon-core.jar -DgroupId=chemaxon -DartifactId=core -Dversion=6.0.2 -Dpackaging=jar
     mvn install:install-file -Dfile=MarvinBeans.jar -DgroupId=chemaxon -DartifactId=MarvinBeans -Dversion=6.0.2 -Dpackaging=jar
     mvn install:install-file -Dfile=MarvinBeans-formats-mdl.jar -DgroupId=chemaxon -DartifactId=MarvinBeans-formats-mdl -Dversion=6.0.2 -Dpackaging=jar
