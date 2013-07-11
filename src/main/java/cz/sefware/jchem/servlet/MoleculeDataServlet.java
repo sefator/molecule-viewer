@@ -16,6 +16,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import chemaxon.formats.MolExporter;
 import chemaxon.struc.Molecule;
 import cz.sefware.jchem.model.MoleculeInfo;
 import cz.sefware.jchem.service.MoleculeDatastore;
@@ -62,8 +63,8 @@ public class MoleculeDataServlet extends GenericServlet implements Servlet {
 			Molecule molecule = store.getMolecule(id);
 			response.setContentType("image/jpeg");
 			// TODO: use new API for image output
-			IOUtils.write(molecule.toBinFormat("jpeg:setcolors,w800,h600,Q96"),
-					response.getOutputStream());
+			IOUtils.write(MolExporter.exportToBinFormat(molecule,
+					"jpeg:setcolors,w800,h600,Q96"), response.getOutputStream());
 			LOGGER.debug("Successfuly returned molecule image.");
 		}
 
