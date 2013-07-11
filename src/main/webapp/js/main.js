@@ -8,6 +8,9 @@ jQuery(document).ready(function(){
         done: function (e, data) {
         	reloadMolecules();
         	loadMolecule(data.result);
+        },
+        fail: function(){
+        	jQuery('.span10 > img').before(jQuery('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> File upload failed!</div>'));
         }
     });
 
