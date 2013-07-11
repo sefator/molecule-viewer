@@ -38,6 +38,7 @@ function reloadMolecules() {
 		dataType: "json",
 		cache:false,
 		success: function(data){
+			//add all molecules to sidebar
 			jQuery.each(data, function(k,v){
 				var li = jQuery("<li style='cursor:pointer;' id='"+v.id+"'><a href='#'>"+v.name+"("+v.formula+")</a></li>");
 				li.data('data', v);
@@ -48,6 +49,10 @@ function reloadMolecules() {
 				});
 				container.append(li);	
 			});
+			// select first molecule if no other is selected
+			if (jQuery("ul#molecules").find('li.active').size()===0){
+				jQuery("ul#molecules").find('li:first > a').click();
+			}
 			
 		}
 	});
