@@ -17,7 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import chemaxon.struc.Molecule;
 import cz.sefware.jchem.model.MoleculeInfo;
-import cz.sefware.jchem.service.SimpleMoleculeService;
+import cz.sefware.jchem.service.MoleculeDatastore;
+import cz.sefware.jchem.service.SimpleMoleculeDatastore;
 
 /**
  * Simple servlet for handling molecule requests. Returns JSON serialized list
@@ -30,7 +31,7 @@ import cz.sefware.jchem.service.SimpleMoleculeService;
 public class MoleculeDataServlet extends GenericServlet implements Servlet {
 	private static final long serialVersionUID = 1L;
 
-	private SimpleMoleculeService service = new SimpleMoleculeService();
+	private MoleculeDatastore store = new SimpleMoleculeDatastore();
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MoleculeDataServlet.class);
@@ -43,7 +44,7 @@ public class MoleculeDataServlet extends GenericServlet implements Servlet {
 		String requestId = request.getParameter("id");
 		if (requestId == null || requestId.isEmpty()) {
 			LOGGER.debug("Received request for file list.");
-			List<MoleculeInfo> infos = service.getMoleculeInfos();
+			List<MoleculeInfo> infos = store.getMoleculeInfos();
 			ObjectMapper om = new ObjectMapper();
 			om.writeValue(response.getOutputStream(), infos);
 			LOGGER.debug("Returned {} items", infos.size());
@@ -51,7 +52,7 @@ public class MoleculeDataServlet extends GenericServlet implements Servlet {
 			LOGGER.debug("Received request for molecule image.");
 			// TODO: handle variable image size
 			Long id = Long.valueOf(requestId);
-			Molecule molecule = service.getMolecule(id);
+			Molecule molecule = store.getMolecule(id);
 			response.setContentType("image/jpeg");
 			IOUtils.write(molecule.toBinFormat("jpeg:setcolors,w800,h600,Q96"),
 					response.getOutputStream());

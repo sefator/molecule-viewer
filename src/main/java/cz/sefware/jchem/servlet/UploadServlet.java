@@ -19,7 +19,8 @@ import chemaxon.formats.MolFormatException;
 import chemaxon.formats.MolImporter;
 import chemaxon.struc.Molecule;
 import cz.sefware.jchem.model.MoleculeInfo;
-import cz.sefware.jchem.service.SimpleMoleculeService;
+import cz.sefware.jchem.service.MoleculeDatastore;
+import cz.sefware.jchem.service.SimpleMoleculeDatastore;
 
 /**
  * Servlet implementation for handling file uploads of Molecule files.
@@ -32,7 +33,7 @@ import cz.sefware.jchem.service.SimpleMoleculeService;
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = -2690570472811965423L;
 
-	private SimpleMoleculeService service = new SimpleMoleculeService();
+	private MoleculeDatastore store = new SimpleMoleculeDatastore();
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UploadServlet.class);
@@ -46,7 +47,7 @@ public class UploadServlet extends HttpServlet {
 			byte[] bytes = IOUtils.toByteArray(part.getInputStream());
 			Molecule molecule = MolImporter.importMol(bytes);
 
-			MoleculeInfo info = service.saveMolecule(bytes, molecule);
+			MoleculeInfo info = store.saveMolecule(bytes, molecule);
 			ObjectMapper om = new ObjectMapper();
 			om.writeValue(response.getOutputStream(), info);
 			LOGGER.debug("File {} sucessfuly saved in {}.", info.getId(),

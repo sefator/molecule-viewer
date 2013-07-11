@@ -2,33 +2,56 @@ package cz.sefware.jchem.service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Singleton;
-
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import chemaxon.formats.MolFormatException;
 import chemaxon.formats.MolImporter;
 import chemaxon.struc.Molecule;
 import cz.sefware.jchem.model.MoleculeInfo;
 
-@Singleton
-public class SimpleMoleculeService {
+/**
+ * Simple implementation of MoleculeDatastore, using directory for storing
+ * molecule files along with MoleculeInfo metadata.
+ * 
+ * @author jg
+ * 
+ */
+public class SimpleMoleculeDatastore implements MoleculeDatastore {
 
+	private static final String DEFAULT_DIRECTORY = "/tmp/files/";
 	private static final String INFO_EXTENSION = ".molinfo";
-	private static final String BASE_DIRECTORY = "/tmp/files/";
+	private String baseDirectory;
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(SimpleMoleculeDatastore.class);
+
+	public SimpleMoleculeDatastore(String directory) {
+		baseDirectory = directory;
+	}
+
+	public SimpleMoleculeDatastore() {
+		baseDirectory = DEFAULT_DIRECTORY;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see cz.sefware.jchem.service.MoleculeDatastore#getMoleculeInfos()
+	 */
+	@Override
 	public List<MoleculeInfo> getMoleculeInfos() {
-		File directory = new File(BASE_DIRECTORY);
+		LOGGER.debug("Listing all info files in {}", baseDirectory);
+		File directory = new File(baseDirectory);
 		File[] files = directory.listFiles(new FilenameFilter() {
-
 			public boolean accept(File file, String filename) {
 				String lowerName = filename.toLowerCase();
 				if (lowerName.endsWith(INFO_EXTENSION)) {
@@ -45,14 +68,20 @@ public class SimpleMoleculeService {
 			try {
 				output.add(om.readValue(f, MoleculeInfo.class));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error("Wrong molecule info file!", e);
 			}
 		}
 		return output;
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see cz.sefware.jchem.service.MoleculeDatastore#saveMolecule(byte[],
+	 * chemaxon.struc.Molecule)
+	 */
+	@Override
 	public MoleculeInfo saveMolecule(byte[] bytes, Molecule molecule) {
 		FileOutputStream output = null;
 		MoleculeInfo info = new MoleculeInfo();
@@ -61,26 +90,24 @@ public class SimpleMoleculeService {
 		info.setName(molecule.getFormula());
 		info.setFormat(molecule.getInputFormat());
 		try {
-			output = new FileOutputStream(new File(BASE_DIRECTORY
+			output = new FileOutputStream(new File(baseDirectory
 					+ File.separator + info.getFilename()));
 			IOUtils.write(bytes, output);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Error writing molecule info.", e);
 
 		} finally {
 			IOUtils.closeQuietly(output);
 		}
 
 		try {
-			output = new FileOutputStream(new File(BASE_DIRECTORY
+			output = new FileOutputStream(new File(baseDirectory
 					+ File.separator + info.getFilename() + INFO_EXTENSION));
 			ObjectMapper om = new ObjectMapper();
 			om.writeValue(output, info);
 			return info;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Error writing molecule file.", e);
 
 		} finally {
 			IOUtils.closeQuietly(output);
@@ -89,20 +116,22 @@ public class SimpleMoleculeService {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * cz.sefware.jchem.service.MoleculeDatastore#getMolecule(java.lang.Long)
+	 */
+	@Override
 	public Molecule getMolecule(Long id) {
 		try {
 			return MolImporter.importMol(IOUtils
-					.toByteArray(new FileInputStream(new File(BASE_DIRECTORY
+					.toByteArray(new FileInputStream(new File(baseDirectory
 							+ String.valueOf(id)))));
 		} catch (MolFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Molecule file is corrupted!", e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Error reading molecule.", e);
 		}
 		return null;
 	}
