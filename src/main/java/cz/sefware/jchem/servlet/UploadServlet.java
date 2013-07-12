@@ -30,7 +30,7 @@ import cz.sefware.jchem.service.SimpleMoleculeDatastore;
  * 
  */
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
-@WebServlet(urlPatterns = "/upload", initParams = { @WebInitParam(name = "baseDirectory", value = SimpleMoleculeDatastore.DEFAULT_DIRECTORY) })
+@WebServlet(urlPatterns = "/upload", name="UploadServlet", initParams = { @WebInitParam(name = "baseDirectory", value = SimpleMoleculeDatastore.DEFAULT_DIRECTORY) })
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = -2690570472811965423L;
 

@@ -29,7 +29,7 @@ import cz.sefware.jchem.service.SimpleMoleculeDatastore;
  * 
  * @author jg
  */
-@WebServlet(urlPatterns = "/MoleculeData", initParams = { @WebInitParam(name = "baseDirectory", value = SimpleMoleculeDatastore.DEFAULT_DIRECTORY) })
+@WebServlet(urlPatterns = "/MoleculeData", name="MoleculeDataServlet", initParams = { @WebInitParam(name = "baseDirectory", value = SimpleMoleculeDatastore.DEFAULT_DIRECTORY) })
 public class MoleculeDataServlet extends GenericServlet implements Servlet {
 	private static final long serialVersionUID = 1L;
 
