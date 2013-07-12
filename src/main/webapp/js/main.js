@@ -32,12 +32,13 @@ function loadMolecule(data){
  */
 function reloadMolecules() {
 	var container = jQuery("ul#molecules");
-	container.empty();
 	jQuery.ajax({
 		url: "MoleculeData",
 		dataType: "json",
 		cache:false,
 		success: function(data){
+			//empty navigation container
+			container.empty();
 			//add all molecules to sidebar
 			jQuery.each(data, function(k,v){
 				var li = jQuery("<li style='cursor:pointer;' id='"+v.id+"'><a href='#'>"+v.name+"("+v.formula+")</a></li>");
